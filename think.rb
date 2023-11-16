@@ -32,5 +32,6 @@ class Think
         if move == "look"
             @map.look_proc(values)
         end
+        return move
     end
 end

@@ -20,7 +20,7 @@ loop do
     end
 #-----ここまで書き換えない-----
 
-    think.first(values)
+    move = think.first(values)
 
 #---------ここから---------
     if values[0] == 0
@@ -30,3 +30,6 @@ loop do
 end # ループここまで
 target.clos
 #-----ここまで書き換えない-----
+if move == "put"
+    # putガチであることを記録
+end
