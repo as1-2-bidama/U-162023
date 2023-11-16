@@ -139,6 +139,11 @@ class Map
             if dirn.include?(@bef_dir)
                 puts "item forward"
                 dir = @bef_dir
+            elsif dirn.empty?
+                puts "canno't get"
+                dirn = @dir_list.dup
+                dirn = kabe(dirn)
+                dirn = dirn.sample
             else
                 puts "item rabbit"
                 dir = dirn.sample
