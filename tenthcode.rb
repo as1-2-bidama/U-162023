@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 require  'CHaserConnect.rb' #呼び出すおまじない
-require 'map.rb'
-require 'think.rb'
+require 'tenth-map.rb'
+require 'tenth-think.rb'
 # 書き換えない
 target = CHaserConnect.new("(っ1ワ1ｃ)") # ()の中好きな名前
 values = Array.new(10)
