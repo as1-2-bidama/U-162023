@@ -7,6 +7,7 @@ class Think
         @bef_dir = ""
         @turn = 0
     end
+
     def first(values)
         @turn += 1
         @map.setMap(values) # valuse:二次元配列,valuse_cp_1:0番目を削除した配列
@@ -24,6 +25,7 @@ class Think
             end
             if direction != @bef_dir
                 move = @map.if_look(move,direction,@bef_dir)
+                @turn = 0
             end
             @bef_dir = direction
         end

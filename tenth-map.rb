@@ -3,6 +3,7 @@ class Map
         #arry: 2次元配列にする配列
         # コミット
         #自分の周辺を2次元配列に落とし込む
+        # @file = File.open("test.txt","w")
         @dir_list = ["Up","Left","Right","Down"]
         @move_list = ["put","walk","look","search"]
         @dir_num_cls = [2,4,6,8]
@@ -20,11 +21,10 @@ class Map
         Mapclear()
         for i in 1 .. 9 do
             @map[(i-1)/3][(i-1)%3] = values[i]
+            File.write("test.txt",values[i],move:"a")
         end
-        @values_cp_1 = values.dup # 0番目を削除した配列
         @values_cp_0 = values.dup # ただのコピー
         @values_cp_0[0] = 0
-        @values_cp_1.delete_at(0)
         mtPut()
     end
 
@@ -56,7 +56,8 @@ class Map
             dirn = escape(coor)
             if dirn.empty?
                 move = @move_list[2]
-                dir = @dir_list[(coor-1)/2]
+                dirn = @dir_num_but_item[coor]
+                dir = dirn.sample
             elsif dirn.instance_of?(Array)
                 dir = dirn.sample
             end
@@ -82,7 +83,18 @@ class Map
         dirn = @dir_list.dup
         dirn = kabe(dirn)
         if dirn.instance_of?(Array)
-            if dirn.size > 1
+            if @but_dir.include?(@bef_dir)
+                puts "not go"
+                for i in @but_dir
+                    dirn.delete(i)
+                end
+                if dirn.size < 1
+                    move = @move_list[2]
+                    dir = @bef_dir
+                elsif dirn.size > 0
+                    dir = dirn.sample
+                end
+            elsif dirn.size > 1
                 dirn.delete(@dir_list[3-@dir_list.index(@bef_dir)]) if @dir_list.index(@bef_dir) != nil
                 puts dirn
                 if dirn.include?(@bef_dir)
@@ -98,6 +110,10 @@ class Map
             end
         end
         dir = bef_move(dirn,dir)
+        if move == @move_list[1]
+            @look_af,@ok_dir,@search_mu,@but_dir = [],[],[],[]
+            puts "clear"
+        end
         return move,dir
     end
 
@@ -109,6 +125,7 @@ class Map
         puts dirn
         return dirn
     end
+
     def item()
         dirn = []
         for i in @dir_num_cls
@@ -143,19 +160,23 @@ class Map
                 puts "canno't get"
                 dirn = @dir_list.dup
                 dirn = kabe(dirn)
-                dirn = dirn.sample
+                dir = dirn.sample
+                puts dirn
             else
                 puts "item rabbit"
                 dir = dirn.sample
             end
             dir = bef_move(dirn,dir)
+            puts "reslut",dir,dirn
         end
         if move == @move_list[1]
             @look_af,@ok_dir,@search_mu,@but_dir = [],[],[],[]
+            puts "clear"
         end
         puts dir
         return move,dir
     end
+
     def bef_move(dirn,dir)
         if @bef_dir != "" and @bef_bef_dir != ""
             puts "a"
@@ -180,6 +201,7 @@ class Map
         end
         return dir
     end
+
     def look_proc(values)
         puts "look_proc"
         setMap(values)
@@ -190,6 +212,15 @@ class Map
         if @map[1][1] == 5
             puts "bec_center"
             @but_dir.push(@bef_dir)
+        elsif @values_cp_0.include?(1)
+            puts "atemtion!"
+            for i in num
+                if @values_cp_0[i] == 1
+                    puts "ohps"
+                    @but_dir.push(@bef_dir)
+                end
+            end
+            puts @but_dir
         else
             for i in num
                 if @values_cp_0[i] == 2
@@ -199,7 +230,7 @@ class Map
                     break
                 end
             end
-            if count == 3
+            if count == 3 and @values_cp_0.include?(3)
                 puts "nonnnonn"
                 @but_dir.push(@bef_dir)
             else
@@ -208,12 +239,14 @@ class Map
             end
         end
     end
+
     def if_look(move,direction,bef_dir)
         if move != @move_list[0] and move != @move_list[2]
             move = @move_list[2]
         end
         return move
     end
+
     def turp_check(dirn)
         dirnn = []
         dirnn.push(@dir_list[0]) if @map[0] == @turp_ptr
@@ -225,6 +258,7 @@ class Map
             for i in [].concat(@but_dir,@ok_dir)
                 dirn.delete(i)
             end
+            puts "item",dirn
             if dirn.size == 0
                 puts "walk turn"
                 if not @ok_dir.empty?
