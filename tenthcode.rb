@@ -3,7 +3,7 @@ require  'CHaserConnect.rb' #呼び出すおまじない
 require 'tenth-map.rb'
 require 'tenth-think.rb'
 # 書き換えない
-target = CHaserConnect.new("(っ1ワ1ｃ)") # ()の中好きな名前
+target = CHaserConnect.new("(っ1ワ0ｃｳｩｯﾋｮｵｱｱｧｱｱｧ)") # ()の中好きな名前
 values = Array.new(10)
 random = Random.new # 乱数生成
 map = Map.new()

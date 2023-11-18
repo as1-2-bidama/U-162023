@@ -1,4 +1,4 @@
-# require "E:\U-16\PortableEditor-Pub-1.0.3\Src\tenthcode\map"
+#require "E:\U-16\PortableEditor-Pub-1.0.3\Src\tenthcode\map"
 
 class Think
     def initialize(map,target)
@@ -6,11 +6,13 @@ class Think
         @target = target
         @bef_dir = ""
         @turn = 0
+        
     end
 
     def first(values)
+        mode = "first"
         @turn += 1
-        @map.setMap(values) # valuse:二次元配列,valuse_cp_1:0番目を削除した配列
+        @map.setMap(values,mode) # valuse:二次元配列,valuse_cp_1:0番目を削除した配列
         if values.slice(1..-1).include?(1)
             move,direction = @map.teki()
         elsif @turn == 3
@@ -34,6 +36,18 @@ class Think
         if move == "look"
             @map.look_proc(values)
         end
+        return move
+    end
+    def second(values)
+        mode = "second"
+        @map.setMap(values,mode)
+        if values.include?(3)
+            move,direction = @map.item()
+        else
+            move,direction = @map.second_move()
+        end
+        eval("values = @target.#{move}#{direction}")
+        @map.second_look(values,move)
         return move
     end
 end
